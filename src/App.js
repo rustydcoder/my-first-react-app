@@ -1,6 +1,7 @@
 import React from 'react';
-import TodoBanner from './components/TodoBanner'
-// import logo from './logo.svg';
+import TodoBanner from './components/TodoBanner';
+import Table from './components/Table';
+import InputTodo from './components/InputTodo';
 // import './App.css';
 
 class App extends React.Component {
@@ -13,22 +14,16 @@ class App extends React.Component {
         { action: 'Get Shoes', done: false },
         { action: 'Collect Tickets', done: true },
         { action: 'Call Rusty', done: false }
-      ],
-      newItemText: ''
+      ]
     }
   }
 
-  updateNewTextTValue = event => {
-    this.setState({ newItemText: event.target.value })
-  }
+  createNewTodo = (task) => {
+    const { todoItems } = this.state;
 
-  createNewTodo = () => {
-    const { todoItems, newItemText: newValue } = this.state;
-
-    if (!todoItems.find(item => item.action === newValue)) {
+    if (!todoItems.find(item => item.action === task)) {
       this.setState({
-        todoItems: [...todoItems, { action: newValue, done: false }],
-        newItemText: ''
+        todoItems: [...todoItems, { action: task, done: false }],
       })
     }
   }
@@ -39,48 +34,19 @@ class App extends React.Component {
     } : item)
   })
 
+  render() {
+    const { userName, todoItems } = this.state
 
-  todoTableRows = () => {
-    this.state.todoItems.map(item => {
-      return (
-        <tr key={item.action}>
-          <td>{item.action}</td>
-          <td>
-            <input type="checkbox" onChange={() => this.toggleTodo(item)} />
-          </td>
-        </tr>
-      )
-    })
-  }
+    return (
+      <div>
+        <TodoBanner name={userName} tasks={todoItems} />
 
-  render = () =>
-    <div>
-      <h4 className="bg-primary text-white text-center p-2">
-        {this.state.userName}'s To Do List
-        ({this.state.todoItems.filter(t => !t.done).length} items to do)
-      </h4>
+        <InputTodo createTodo={this.createNewTodo} />
 
-      <div className='container-fluid'>
-        <div className='my-1'>
-          <input className='form-control' value={this.state.newItemText} onChange={this.updateNewTextTValue} />
-          <button className='btn btn-primary mt-1' onClick={this.createNewTodo}>
-            Add
-          </button>
-        </div>
+        <Table items={todoItems} toggleDone={this.toggleTodo} />
       </div>
-
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Done</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.todoTableRows()}
-        </tbody>
-      </table>
-    </div>
+    )
+  }
 }
 
 export default App;
