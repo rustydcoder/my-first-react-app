@@ -2,7 +2,7 @@ import React from 'react';
 import TodoBanner from './components/TodoBanner';
 import Table from './components/Table';
 import InputTodo from './components/InputTodo';
-// import './App.css';
+import VisibilityControl from './components/VisibilityControl';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class App extends React.Component {
         { action: 'Get Shoes', done: false },
         { action: 'Collect Tickets', done: true },
         { action: 'Call Rusty', done: false }
-      ]
+      ],
+      showCompleted: true
     }
   }
 
@@ -35,15 +36,24 @@ class App extends React.Component {
   })
 
   render() {
-    const { userName, todoItems } = this.state
+    const { userName, todoItems, showCompleted } = this.state
 
     return (
       <div>
         <TodoBanner name={userName} tasks={todoItems} />
+        <div className='container-fluid'>
+          <InputTodo createTodo={this.createNewTodo} />
 
-        <InputTodo createTodo={this.createNewTodo} />
+          <Table flag={false} items={todoItems} toggleDone={this.toggleTodo} />
+        </div>
 
-        <Table items={todoItems} toggleDone={this.toggleTodo} />
+        <div className='bg-secondary text-white text-center p-2'>
+          <VisibilityControl description='Completed Tasks'
+            isChecked={showCompleted}
+            callback={checked => this.setState({ showCompleted: checked })} />
+        </div>
+
+        {showCompleted && <Table flag={true} items={todoItems} toggleDone={this.toggleTodo} />}
       </div>
     )
   }

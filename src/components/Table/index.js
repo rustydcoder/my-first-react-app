@@ -10,11 +10,12 @@ const TableHead = () => (
 )
 
 const TableBody = props => {
-   const rows = props.items.map((row, index) =>
+   const { items, toggleDone, flag } = props;
+   const rows = items.filter(item => item.done === flag).map((row, index) =>
       <tr key={index}>
          <td>{row.action}</td>
          <td>
-            <input type="checkbox" checked={row.done} onChange={() => props.toggleDone(row)} />
+            <input type="checkbox" checked={row.done} onChange={() => toggleDone(row)} />
          </td>
       </tr>
    )
@@ -24,11 +25,11 @@ const TableBody = props => {
 
 class Table extends Component {
    render() {
-      const { items, toggleDone } = this.props
+      const { items, toggleDone, flag } = this.props
       return (
          <table className="table-bordered table table-striped">
             <TableHead />
-            <TableBody toggleDone={toggleDone} items={items} />
+            <TableBody flag={flag} toggleDone={toggleDone} items={items} />
          </table>
       )
    }
