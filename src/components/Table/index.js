@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+const capitalize = str => {
+   return str[0].toUpperCase() + str.slice(1).toLowerCase()
+}
+
 const TableHead = () => (
    <thead>
       <tr>
@@ -13,7 +17,7 @@ const TableBody = props => {
    const { items, toggleDone, flag } = props;
    const rows = items.filter(item => item.done === flag).map((row, index) =>
       <tr key={index}>
-         <td>{row.action}</td>
+         <td>{capitalize(row.action)}</td>
          <td>
             <input type="checkbox" checked={row.done} onChange={() => toggleDone(row)} />
          </td>

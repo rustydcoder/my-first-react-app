@@ -10,10 +10,6 @@ class App extends React.Component {
     this.state = {
       userName: 'Emmanuel',
       todoItems: [
-        { action: 'Buy Flowers', done: false },
-        { action: 'Get Shoes', done: false },
-        { action: 'Collect Tickets', done: true },
-        { action: 'Call Rusty', done: false }
       ],
       showCompleted: true
     }
@@ -25,7 +21,7 @@ class App extends React.Component {
     if (!todoItems.find(item => item.action === task)) {
       this.setState({
         todoItems: [...todoItems, { action: task, done: false }],
-      })
+      }, _ => localStorage.setItem('todo', JSON.stringify(this.state)))
     }
   }
 
@@ -34,6 +30,16 @@ class App extends React.Component {
       ...item, done: !item.done
     } : item)
   })
+
+  componentDidMount = () => {
+    let data = localStorage.getItem('todo');
+    this.setState(data ? JSON.parse(data) : {
+      userName: 'Emmanuel',
+      todoItems: [
+      ],
+      showCompleted: true
+    })
+  }
 
   render() {
     const { userName, todoItems, showCompleted } = this.state
